@@ -10,6 +10,7 @@ class pythonfileinfo():
 		self.classes = []
 		self.variables = []
 		self.strings = []
+		self.vars = {}
 		# general file information
 		self.fileinfo = {}
 		self.fileinfo["md5"] = hashlib.md5(open(file,"rb").read()).hexdigest()
@@ -56,6 +57,7 @@ class pythonfileinfo():
 			if line.startswith("def") == False:
 				if len(line.split(" = ")) == 2:
 					self.variables.append(line.split(" = ")[1])
+					self.vars[line.split(" = ")[0]] = line.split(" = ")[1]
 			# strings
 			if line.startswith("def") == False and line.startswith("class") == False:
 				if len(line.split(" = ")) == 2:
@@ -78,8 +80,14 @@ class pythonfileinfo():
 if __name__ == "__main__":
 	print("----- PythonFileInfo -----")
 	name = input("Enter a file to scan: ")
+
 	fdata = pythonfileinfo(name)
 	print("\n----- Results for {} -----".format(name))
+	print("\n----- General file data -----")
+	print("File MD5: {}".format(fdata.fileinfo["md5"]))
+	print("File SHA256: {}".format(fdata.fileinfo["sha256"]))
+	print("File size: {}".format(fdata.fileinfo["size"]))
+	print("Total lines: {}".format(fdata.fileinfo["lines"]))
 	print("\n----- Imports -----")
 	for imp in fdata.imports:
 		print("{}".format(imp))
